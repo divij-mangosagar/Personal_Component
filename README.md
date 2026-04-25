@@ -45,60 +45,6 @@ The component follows the OSU layered design:
 
 ---
 
-## Mathematical Background
-
-### Sample Mean
-
-\[
-\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
-\]
-
-### Sample Variance (Unbiased)
-
-\[
-s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2
-\]
-
-### Sample Standard Deviation
-
-\[
-s = \sqrt{s^2}
-\]
-
-### Covariance
-
-\[
-\text{Cov}(X,Y) = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
-\]
-
-### Pearson Correlation
-
-\[
-\rho_{X,Y} = \frac{\text{Cov}(X,Y)}{s_X s_Y}
-\]
-
-### Maximum Likelihood Estimation for Normal Distribution
-
-\[
-\hat{\mu} = \frac{1}{n}\sum_{i=1}^{n} x_i
-\]
-
-\[
-\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^{n} (x_i - \hat{\mu})^2
-\]
-
-### Box-Muller Transform (Standard Normal Sampling)
-
-\[
-Z_1 = \sqrt{-2 \ln U_1} \cos(2\pi U_2)
-\]
-\[
-Z_2 = \sqrt{-2 \ln U_1} \sin(2\pi U_2)
-\]
-
-where \(U_1, U_2 \sim \text{Uniform}(0,1)\).
-
----
 
 ## Getting Started
 
@@ -107,4 +53,8 @@ where \(U_1, U_2 \sim \text{Uniform}(0,1)\).
 - Java 11 or higher
 - OSU Components library (provided in CSE 2231 course environment)
 - JUnit 4 for testing
+
+## Instalation 
+
+ - Clone the git repo: https://github.com/divij-mangosagar/Personal_Component.git
 
