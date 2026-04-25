@@ -104,22 +104,28 @@ public class DatasetRV1L extends DatasetRVSecondary implements DatasetRVKernel {
 
     @Override
     public final void addElement(int rowVar, int col, Double observation) {
-        assert this.dataObservations
-                .length() < rowVar : "Violation of: No random variable at row";
-        Sequence<Double> randomVarRow = this.dataObservations.entry(rowVar);
-        if (col >= randomVarRow.length()) {
+        Sequence<Double> randomVarRow = new Sequence1L<>();
+        if (this.dataObservations.length() < rowVar) {
+            randomVarRow = new Sequence1L<>();
             randomVarRow.add(randomVarRow.length(), observation);
+            this.dataObservations.add(this.dataObservations.length(),
+                    randomVarRow);
         } else {
-            randomVarRow.replaceEntry(col, observation);
+            randomVarRow = this.dataObservations.entry(rowVar);
+            if (col >= randomVarRow.length()) {
+                randomVarRow.add(randomVarRow.length(), observation);
+            } else {
+                randomVarRow.replaceEntry(col, observation);
+            }
         }
     }
 
     @Override
     public final void removeElement(int rowVar, int col) {
         assert this.dataObservations
-                .length() < rowVar : "Violation of: No random variable at row";
-        assert this.dataObservations.entry(col)
-                .length() < col : "Violation of: No observation at index col";
+                .length() > rowVar : "Violation of: No random variable at row";
+        assert col >= 0 && col < this.dataObservations.entry(rowVar)
+                .length() : "Violation of: No observation at index col";
         Sequence<Double> randomVarRow = this.dataObservations.entry(rowVar);
         randomVarRow.remove(col);
     }
@@ -127,17 +133,17 @@ public class DatasetRV1L extends DatasetRVSecondary implements DatasetRVKernel {
     @Override
     public final double getElement(int rowVar, int col) {
         assert this.dataObservations
-                .length() < rowVar : "Violation of: No random variable at row";
-        assert this.dataObservations.entry(col)
-                .length() < col : "Violation of: No observation at index col";
+                .length() > rowVar : "Violation of: No random variable at row";
+        assert col >= 0 && col < this.dataObservations.entry(rowVar)
+                .length() : "Violation of: No observation at index col";
         Sequence<Double> randomVarRow = this.dataObservations.entry(rowVar);
-        return randomVarRow.remove(col);
+        return randomVarRow.entry(col);
     }
 
     @Override
     public final int numberOfObservations(int rowVar) {
         assert this.dataObservations
-                .length() < rowVar : "Violation of: No random variable at row";
+                .length() > rowVar : "Violation of: No random variable at row";
         Sequence<Double> randomVarRow = this.dataObservations.entry(rowVar);
         return randomVarRow.length();
     }

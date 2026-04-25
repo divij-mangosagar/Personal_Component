@@ -71,8 +71,8 @@ public abstract class DatasetRVSecondary implements DatasetRV {
             }
             // divides each individual frequency by n,
             // the total number of observations, sample size
-            double frequency = (double) (observationCount / numberObservations);
-            probabilities.add(probabilities.length() - 1,
+            double frequency = (double) observationCount / numberObservations;
+            probabilities.add(probabilities.length(),
                     Double.valueOf(frequency));
 
         }
@@ -175,7 +175,7 @@ public abstract class DatasetRVSecondary implements DatasetRV {
                                 - meanX) * (yObservation - meanY);
                         covarianceXY += individualMultipliedDifference;
                     }
-                    covarianceXY *= (1 / (sampleSize - 1));
+                    covarianceXY /= (sampleSize - 1);
                     covCombinations.add(covCombinations.length(), covarianceXY);
                 }
             }
@@ -221,7 +221,7 @@ public abstract class DatasetRVSecondary implements DatasetRV {
                                 - meanX) * (yObservation - meanY);
                         covarianceXY += individualMultipliedDifference;
                     }
-                    covarianceXY *= (1 / (sampleSize - 1));
+                    covarianceXY /= (sampleSize - 1);
                     covCombinations.add(covCombinations.length(), covarianceXY);
                 }
             }
@@ -260,7 +260,8 @@ public abstract class DatasetRVSecondary implements DatasetRV {
     public final Sequence<Sequence<Double>> sampleCorrelation(
             Sequence<Integer> varSequence) {
         Sequence<Sequence<Double>> correlationCoefficient = new Sequence1L<>();
-        Sequence<Sequence<Double>> covariance = this.sampleCovariance();
+        Sequence<Sequence<Double>> covariance = this
+                .sampleCovariance(varSequence);
         // finds the correlation coefficient for each covariance in the matrix
         for (int i = 0; i < covariance.length(); i++) {
             Sequence<Double> correlationCombinations = new Sequence1L<>();
