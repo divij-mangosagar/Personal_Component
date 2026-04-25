@@ -108,8 +108,3 @@ where \(U_1, U_2 \sim \text{Uniform}(0,1)\).
 - OSU Components library (provided in CSE 2231 course environment)
 - JUnit 4 for testing
 
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/DatasetRV.git
