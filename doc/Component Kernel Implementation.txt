@@ -1,0 +1,8 @@
+﻿Representation Choice:
+I will represent DatasetRV using a Sequence<Sequence<Double>> where the outer sequence stores random variables (rows) and each inner sequence stores observations for that variable (columns).
+Why this representation:
+This representation directly mirrors the mathematical model, in which DATASET is defined as a finite sequence of finite sequences of real numbers. This allows dynamic resizing (variables and observations can be added or removed) and provides easy O(1) access to any observation using getEntry(row).getEntry(col). Using OSU's Sequence component also hides implementation details and follows course conventions.
+Convention (Representation Invariant):
+this.dataObservations != null and for all i, j where 0 ≤ i, j < number of variables, the length of each inner sequence is the same (all variables have the same number of observations). This ensures the dataset forms a proper rectangular matrix.
+Correspondence (Abstraction Function):
+The mathematical dataset is the sequence of sequences stored in dataObservations, where the i-th outer sequence represents the i-th random variable and the j-th element of that inner sequence represents the j-th observation of that variable.
