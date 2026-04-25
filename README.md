@@ -1,90 +1,115 @@
-# Portfolio Project
+# DatasetRV: A Multivariate Statistical Component for CSE 2231
 
-The purpose of this repo is to provide a framework for creating your own
-component in the software sequence discipline. If you were unsure whether
-or not to make your own, consider the following testimonial:
+## Overview
 
-> I really enjoyed the portfolio project! It gave me a stronger understanding
-> of the OSU software discipline while also giving me the flexibility to
-> design something that reflected my interests. This made the experience
-> rewarding and enjoyable as I created a product I was proud of!
+**DatasetRV** is a Java component that stores and analyzes multivariate datasets. It provides:
 
-## Recommended Steps to Get Started
+- Storage for multiple random variables (rows) with multiple observations (columns)
+- Descriptive statistics (mean, variance, standard deviation)
+- Multivariate analysis (covariance matrix, correlation matrix)
+- Distribution fitting (Normal distribution parameter estimation)
+- Random sampling from fitted distributions
+- Probability calculations using Monte Carlo simulation
 
-When starting your portfolio project, the following steps should make your life
-a bit easier.
+This component was developed as the **portfolio project** for CSE 2231 (Software II) at The Ohio State University, following the OSU component design pattern.
 
-### Step 1: Create a Repo From This Template
+---
 
-<!-- TODO: use GitHub to create a repo from this template -->
+## Features
 
-Assuming you're reading this README from GitHub, you can make use of this
-repo by clicking the `Use this template` button in the top-right corner of
-this page. If you can't find the button, [this link][use-this-template] 
-should work as well. Personally, I would recommend using the 
-`Create a new repository` option, which will allow you to name the 
-repository after your component. Given that you will be submitting pull 
-requests to me through Carmen, you'll want to make sure your repository 
-is public. Then, you can click `Create repository`. After that, you can 
-go through all the usual steps of cloning a repository on your system to 
-get to work. I use GitHub Desktop to clone projects, and it has a nice 
-feature of letting you open a repo directly in VSCode from the 
-`Repository` menu.
+| Feature | Description |
+|---------|-------------|
+| **Data Storage** | Store multiple variables with observations using `Sequence<Sequence<Double>>` |
+| **Descriptive Statistics** | Sample mean, variance, standard deviation for any variable |
+| **Frequency Analysis** | Calculate frequency of observations with optional combination |
+| **Moments** | First four statistical moments (mean, variance, skewness, kurtosis) |
+| **Multivariate Analysis** | Full covariance and correlation matrices |
+| **Subset Analysis** | Compute covariance/correlation for selected variables only |
+| **Distribution Fitting** | Estimate Normal distribution parameters from data |
+| **Random Sampling** | Generate new samples from fitted Normal distributions (univariate and multivariate) |
+| **Probability Calculation** | Monte Carlo estimation of probabilities within bounds |
 
-### Step 2: Install Recommended Plugins
+---
 
-<!-- TODO: install recommended plugins and delete this comment -->
+## Component Architecture
 
-When you open VSCode with this project, you should get a notification in the
-bottom right corner that there are some recommended extensions to install.
-Click install all. If you ignored this message or it never came up, feel free
-to press CTRL+SHIFT+P and type "Show Recommended Extensions". Install all of the
-extensions listed.
+The component follows the OSU layered design:
 
-### Step 3: Install the Latest JDK
+| Layer | File | Responsibility |
+|-------|------|----------------|
+| Kernel Interface | `DatasetRVKernel.java` | Declares primitive methods (`addElement`, `removeElement`, `getElement`) |
+| Secondary Interface | `DatasetRV.java` | Declares convenience methods (`sampleMean`, `covarianceMatrix`) |
+| Abstract Class | `DatasetRVSecondary.java` | Implements secondary methods using only kernel methods |
+| Concrete Class | `DatasetRV1L.java` | Implements kernel methods using `Sequence<Sequence<Double>>` storage |
+| Client Class | `NormalDistribution.java` | Example client using the component for Normal distribution analysis |
 
-<!-- TODO: install latest JDK and delete this comment -->
+---
 
-If you do not have an available JDK on your system, you may be prompted to
-install one by VSCode. The default seems to be Red Hat's OpenJDK, which seems to
-require you to register for an account or to install on the command line.
-Regardless, there is no mac support. As a result, I would just recommend
-installing the latest JDK [directly from Oracle's site][jdk-downloads].
+## Mathematical Background
 
-### Step 4: Add Key Libraries to Project
+### Sample Mean
 
-<!-- TODO: add key libraries to project and delete this comment -->
+\[
+\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
+\]
 
-As you are probably all aware at this point, you need the components jar to get
-anything running. My advice is to [download it from here][components-jar]. Then,
-drop it into the `lib` folder in the project. Git automatically ignores anything
-you put here by default, so don't worry about committing it to version control.
+### Sample Variance (Unbiased)
 
-Similarly, you will need the testing APIs (e.g., JUnit). Perhaps the easiest way
-to include them in your project is to click the beaker symbol in the left
-sidebar; it's right below the extensions button which looks like four squares.
-If you do not see this button, try creating a Java file in `src`. From there, 
-you can click "Enable Java Tests" and then click "JUnit" from the
-dropdown. That's it! You should now see the two JUnit libraries in the lib
-folder.
+\[
+s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2
+\]
 
-**Note**: if you're using VSCode for class projects, you might be wondering
-why you never had to do this. In general, it's bad practice to commit binaries
-to version control. However, we have no way of managing dependencies with the
-custom `components.jar`, so I included them directly in the template. I did not
-include them here, so you could see how it might be done from scratch. If at any
-point you're struggling with Step 3, just copy the lib folder from the monorepo
-template.
+### Sample Standard Deviation
 
-## Next Steps
+\[
+s = \sqrt{s^2}
+\]
 
-<!-- TODO: navigate to part 1 of the portfolio project and delete this comment -->
+### Covariance
 
-Now that you have everything setup, you can begin crafting your component. There
-will be deadlines for each step in Carmen, but you're free to complete each step
-as early as you'd like. To start, you'll want to visit the [doc](doc/) directory
-for each assignment file.
+\[
+\text{Cov}(X,Y) = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
+\]
 
-[components-jar]: https://cse22x1.engineering.osu.edu/common/components.jar
-[jdk-downloads]: https://www.oracle.com/java/technologies/downloads/
-[use-this-template]: https://github.com/new?template_name=portfolio-project&template_owner=jrg94
+### Pearson Correlation
+
+\[
+\rho_{X,Y} = \frac{\text{Cov}(X,Y)}{s_X s_Y}
+\]
+
+### Maximum Likelihood Estimation for Normal Distribution
+
+\[
+\hat{\mu} = \frac{1}{n}\sum_{i=1}^{n} x_i
+\]
+
+\[
+\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^{n} (x_i - \hat{\mu})^2
+\]
+
+### Box-Muller Transform (Standard Normal Sampling)
+
+\[
+Z_1 = \sqrt{-2 \ln U_1} \cos(2\pi U_2)
+\]
+\[
+Z_2 = \sqrt{-2 \ln U_1} \sin(2\pi U_2)
+\]
+
+where \(U_1, U_2 \sim \text{Uniform}(0,1)\).
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Java 11 or higher
+- OSU Components library (provided in CSE 2231 course environment)
+- JUnit 4 for testing
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/DatasetRV.git
